@@ -1,0 +1,98 @@
+{
+  "_meta": {
+    "description": "Genesis PROV 2 Packaging OS -- Headline Results",
+    "version": "1.0.0",
+    "generated": "2026-02-18",
+    "note": "Machine-readable summary of key validated metrics"
+  },
+  "rectangular_immunity": {
+    "azimuthal_effect_pct": 0.0,
+    "method": "NLGEOM FEM (CalculiX, Inductiva Cloud)",
+    "cases": 30,
+    "confidence": "Very High",
+    "materials_tested": ["Si", "Glass", "InP", "GaN", "AlN"],
+    "warpage_range_nm": "24-44 (independent of k_azi)"
+  },
+  "chaos_cliff": {
+    "amplification_factor": 23.4,
+    "safe_zone_mean_warpage_nm": 276,
+    "cliff_zone_mean_warpage_nm": 6454,
+    "cliff_zone_std_nm": 14216,
+    "kazi_cliff_range": [0.7, 1.15],
+    "method": "NLGEOM FEM",
+    "cases": 41,
+    "confidence": "High",
+    "yield_at_1um_safe_zone": "100%",
+    "yield_at_1um_cliff_zone": "33%"
+  },
+  "ai_compiler": {
+    "model": "GradientBoostingRegressor",
+    "r_squared": 0.9977,
+    "cv_r_squared": 0.9982,
+    "cv_std": 0.0001,
+    "training_samples": 3508,
+    "training_source": "CLPT analytical (smart_sweep)",
+    "prediction_time_ms": 1,
+    "cross_domain_r_squared": -0.69,
+    "cross_domain_note": "Expected mismatch: CLPT (linear) vs NLGEOM FEM (nonlinear)",
+    "confidence": "High (within CLPT domain)"
+  },
+  "design_desert": {
+    "paths_blocked": 11,
+    "paths_total": 11,
+    "task_ids": 645,
+    "sha256_hashes": 500,
+    "method": "FEM + analytical validation",
+    "confidence": "High"
+  },
+  "bayesian_optimization": {
+    "best_warpage_um": 4.53,
+    "method": "Cloud FEM (NLGEOM)",
+    "evaluations": 14,
+    "confidence": "High"
+  },
+  "cartesian_improvement": {
+    "single_layer_vs_uniform": "1.03x",
+    "multilayer_vs_baseline": "5.0x",
+    "method_single": "Von Karman nonlinear solver",
+    "method_multi": "CLPT + Bayesian optimization"
+  },
+  "panel_performance_projections": {
+    "organic_510x515mm": {
+      "baseline_um": 310,
+      "optimized_um": 63,
+      "improvement": "5.0x"
+    },
+    "glass_510x515mm": {
+      "baseline_um": 186,
+      "optimized_um": 37,
+      "improvement": "5.0x"
+    },
+    "si_interposer_100x100mm": {
+      "baseline_um": 24,
+      "optimized_um": 12,
+      "improvement": "2.0x"
+    },
+    "note": "Projections using validated CLPT + von Karman. Not physical measurements."
+  },
+  "yield_certification": {
+    "at_30um_spec": "99.5%",
+    "at_10um_spec": "98.4%",
+    "at_1um_spec": "70.7%",
+    "source": "Distribution from 645 real FEM cases"
+  },
+  "patent_claims": {
+    "total": 145,
+    "independent": 26,
+    "dependent": 119,
+    "subsystems": 6,
+    "filing_type": "US Provisional",
+    "priority_date": "January 2026"
+  },
+  "data_integrity": {
+    "verified_task_ids": 645,
+    "sha256_hashes": 500,
+    "manifest_files": 3547,
+    "gdsii_output_mb": 218
+  }
+}
