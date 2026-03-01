@@ -218,7 +218,7 @@ On glass substrates specifically, the amplification factor reaches 45.7x (1,072 
 
 ### 4.4 The AI Compiler
 
-**Statement**: A GradientBoosting surrogate model trained on 3,508 CLPT analytical samples predicts warpage with R-squared = 0.9977, enabling sub-millisecond design evaluation.
+**Statement**: A GradientBoosting surrogate model trained on 3,508 CLPT analytical cases predicts warpage with R-squared = 0.9977 (within-domain CLPT held-out test, not FEM-validated), enabling sub-millisecond design evaluation.
 
 **Evidence**: The AI compiler (Reduced-Order Model or ROM) performance:
 
@@ -227,11 +227,11 @@ On glass substrates specifically, the amplification factor reaches 45.7x (1,072 
 | Model type | GradientBoostingRegressor |
 | Training samples | 3,508 CLPT analytical (smart Latin Hypercube sweep) |
 | Training / Test split | 2,806 / 702 (80/20) |
-| Test R-squared (within CLPT domain) | **0.9977** |
+| Test R-squared (within CLPT domain) | **0.9977** (within-domain CLPT held-out test, not FEM-validated) |
 | 5-fold cross-validation R-squared | 0.9982 +/- 0.0001 |
 | Prediction time | < 1 ms |
 | Feature space | 8 design parameters |
-| Cross-domain R-squared (vs. NLGEOM FEM) | -0.69 (expected domain mismatch) |
+| Cross-domain R-squared (vs. NLGEOM FEM) | -0.69 (from a separate FEM surrogate model (325 cases), not a test of the CLPT ROM) |
 | Dominant feature | param_1 controls 85.5% of predictions |
 
 The cross-domain gap (CLPT-trained ROM vs. NLGEOM FEM yields R-squared = -0.69) is expected and honestly disclosed: CLPT is a linear theory, while NLGEOM captures geometric nonlinearity. The ROM is intended for rapid design-space exploration within the CLPT domain. Final designs are validated with full NLGEOM FEM simulation.
@@ -270,7 +270,7 @@ graph TD
     end
 
     subgraph "Stage 3: AI Compiler"
-        G --> H[GradientBoosting ROM<br/>R-squared = 0.9977]
+        G --> H[GradientBoosting ROM<br/>within-domain CLPT R² = 0.9977]
         H --> I[Sub-millisecond Prediction<br/>8-Parameter Design Space]
         I --> J[Inverse Design Engine<br/>Sobol + Pareto + Gradient]
     end
@@ -453,7 +453,7 @@ The ROM architecture:
 2. **Training data**: 3,508 CLPT analytical evaluations via smart Latin Hypercube sweep
 3. **Model**: GradientBoosting regression (scikit-learn) with hyperparameter tuning
 4. **Validation**: 5-fold cross-validation, R-squared = 0.9982 +/- 0.0001
-5. **Test accuracy**: R-squared = 0.9977 on held-out test set
+5. **Test accuracy**: R-squared = 0.9977 on held-out test set (within-domain CLPT test, not FEM-validated)
 6. **Deployment**: Sub-millisecond prediction for real-time design evaluation
 
 The ROM enables:
@@ -493,7 +493,7 @@ All metrics below are machine-verified from FEM simulations or analytical comput
 | Chaos cliff amplification | **23.4x** (up to 45.7x on glass) | NLGEOM FEM (584 cases) | Verified |
 | Chaos cliff warpage (cliff zone) | 6,454 nm mean, 48,952 nm max | NLGEOM FEM at k_azi = 1.0 | Verified |
 | Chaos cliff warpage (safe zone) | 276 nm mean | NLGEOM FEM at k_azi = 0.1 | Verified |
-| AI Compiler R-squared | **0.9977** | GradientBoosting / held-out test (3,508 samples) | Verified |
+| AI Compiler R-squared | **0.9977** (within-domain CLPT held-out test, not FEM-validated) | GradientBoosting / held-out test (3,508 CLPT analytical cases) | Verified |
 | AI Compiler CV R-squared | 0.9982 +/- 0.0001 | 5-fold cross-validation | Verified |
 | Best warpage (Bayesian opt) | **4.53 um** | Cloud FEM NLGEOM (14 cases) | Verified |
 | Cartesian vs. uniform (single layer) | **1.03x** improvement | Von Karman nonlinear solver | Verified |
@@ -695,7 +695,7 @@ This contrast -- 99.5% yield with Genesis optimization versus 28.4% yield with r
 | **Chaos cliff awareness** | Unknown / undetected | Mapped with 584 FEM cases, cliff at k_azi 0.7-1.15 |
 | **Process history** | Instant-assembly assumption | Birth-death sequential simulation (captures 2,838 um hidden warpage) |
 | **Optimization method** | Manual tuning or grid search | Bayesian optimization with GP surrogate + Expected Improvement |
-| **Design evaluation speed** | Hours per FEM case | < 1 ms via AI compiler (R-squared = 0.9977) |
+| **Design evaluation speed** | Hours per FEM case | < 1 ms via AI compiler (within-domain CLPT R² = 0.9977) |
 | **Material coverage** | Typically Si only | Si, SiC, Glass, InP, GaN, AlN validated |
 | **Panel readiness** | Not validated for rectangular | Proven (30 rectangular FEM + Cartesian formula) |
 
@@ -704,7 +704,7 @@ This contrast -- 99.5% yield with Genesis optimization versus 28.4% yield with r
 | Model | Domain | R-squared | Speed | Training Data | Source |
 |:------|:-------|:----------|:------|:-------------|:------|
 | **Genesis ROM** | **CLPT warpage** | **0.9977** | **< 1 ms** | **3,508 analytical** | **This work** |
-| Genesis ROM (cross-domain) | CLPT to FEM | -0.69 | < 1 ms | 3,508 analytical | This work (honestly disclosed) |
+| Separate FEM surrogate (cross-domain) | CLPT to FEM | -0.69 | < 1 ms | 325 FEM cases | This work (separate model, not a test of the CLPT ROM) |
 | Typical industry ROM | FEM warpage | 0.85-0.95 | 10-100 ms | 100-500 FEM | Published literature |
 | Direct FEM simulation | Full physics | N/A (ground truth) | 2-8 hours | N/A | CalculiX / Ansys |
 
@@ -735,7 +735,7 @@ The validation hierarchy ensures each claim is supported by multiple independent
 |:------|:--------------|:-----------------|:----------|
 | Rectangular Immunity | NLGEOM FEM (30 cases) | Local Von Karman FD (3 cases) | Both show 0.000% effect |
 | Chaos Cliff | NLGEOM FEM (584 cases) | CLPT analytical (confirms physics) | Cliff confirmed across all methods |
-| AI Compiler accuracy | 5-fold CV (R^2 = 0.9982) | Held-out test (R^2 = 0.9977) | Consistent within 0.0005 |
+| AI Compiler accuracy | 5-fold CV (R^2 = 0.9982) | Held-out test (R^2 = 0.9977, within-domain CLPT) | Consistent within 0.0005 |
 | Bayesian optimization | Cloud FEM (14 cases) | CLPT analytical (validates trend) | Best 4.53 um from FEM |
 | Material invariance | NLGEOM FEM (15 cases) | Analytical (CTE scaling confirms) | All 6 materials show cliff |
 
@@ -865,7 +865,7 @@ The patent filing contains **145 claims** (26 independent, 119 dependent) across
 |:----------|-------:|------------:|----------:|:------|:------------------|
 | A: Geometry-Adaptive Stiffness | 1-30 | 5 | 25 | Cartesian stiffness field, rectangular immunity, chaos cliff detection | **Strong** -- 30+584 NLGEOM FEM cases |
 | B: Process History | 31-55 | 5 | 20 | Birth-death simulator, sequential assembly modeling, process compensation | **Strengthened** -- Multi-layer Bayesian validated |
-| C: AI-Accelerated Design | 56-75 | 5 | 15 | ROM compiler (R^2=0.9977), inverse design, active learning | **Strong** -- Working software, 3,508 samples |
+| C: AI-Accelerated Design | 56-75 | 5 | 15 | ROM compiler (within-domain CLPT R^2=0.9977), inverse design, active learning | **Strong** -- Working software, 3,508 CLPT analytical cases |
 | D: Magnetic Alignment | 76-95 | 4 | 16 | Hexapole field cancellation, alignment integration | **Weak** -- FEM disproves full nulling (68.9% reduction only) |
 | E: Chemical Strengthening | 96-105 | 3 | 7 | CZM cohesive zone modeling, traction-separation, delamination prediction | **Moderate** |
 | F: Extended Protection | 106-145 | 4 | 36 | UQ, scaling, Design Desert documentation, cross-patent integration | **Mixed** -- some validated, some aspirational |
@@ -877,7 +877,7 @@ The patent filing contains **145 claims** (26 independent, 119 dependent) across
 
 **Subsystem B (Claims 31-55)** covers the temporal dimension: the birth-death simulation framework that models substrate assembly as sequential layer addition/removal events, capturing the 2,838 um of hidden warpage that instant-assembly simulations miss. Includes the spatially-varying density function rho(x,y) for process-history compensation and Bayesian optimization for multi-layer stacks (5x warpage reduction on 4-layer composites).
 
-**Subsystem C (Claims 56-75)** covers the AI compiler: the GradientBoosting ROM with R-squared = 0.9977, the training pipeline, feature engineering, cross-validation methodology, inverse design via gradient descent and Latin Hypercube sampling, Pareto search, Sobol sensitivity analysis, and active learning methods for iteratively refining the ROM.
+**Subsystem C (Claims 56-75)** covers the AI compiler: the GradientBoosting ROM with R-squared = 0.9977 (within-domain CLPT held-out test, not FEM-validated), the training pipeline, feature engineering, cross-validation methodology, inverse design via gradient descent and Latin Hypercube sampling, Pareto search, Sobol sensitivity analysis, and active learning methods for iteratively refining the ROM.
 
 **Subsystem F (Claims 106-145)** provides the defensive IP fortress: Design Desert documentation (11/11 paths blocked, supported by 645 task IDs), uncertainty quantification via Monte Carlo, scaling methods from die-level to panel-level, and cross-patent integration points with other Genesis provisionals.
 
@@ -912,7 +912,7 @@ For the full breakdown, see [CLAIMS_SUMMARY.md](CLAIMS_SUMMARY.md).
 | GDSII design output | 218 MB | Layout file generated by design compiler (v2.88) |
 | SHA-256 manifest | 3,547 files | Cryptographic integrity hashes |
 | CalculiX .frd outputs | 500 unique files | 64,406 bytes each, unique MD5 hashes verified |
-| ROM model checkpoint | cowos_rom.pkl | Retrained GradientBoosting (R^2 = 0.9977) |
+| ROM model checkpoint | cowos_rom.pkl | Retrained GradientBoosting (within-domain CLPT R^2 = 0.9977) |
 | Parquet database | 1,112 cases | Complete FEM case database |
 
 ### Compute Investment
@@ -1006,7 +1006,7 @@ NLGEOM FEM results are validated against analytical Kirchhoff plate theory for c
 
 ### ROM Domain Limitations
 
-The AI compiler (R-squared = 0.9977) is trained on CLPT analytical data. Cross-domain R-squared against NLGEOM FEM is -0.69. This is expected: CLPT is a linear theory, while NLGEOM captures geometric nonlinearity. The ROM is intended for design-space exploration within the CLPT domain. Feature dominance: param_1 controls 85.5% of predictions. Final designs should be validated with full NLGEOM FEM.
+The AI compiler (R-squared = 0.9977, within-domain CLPT held-out test, not FEM-validated) is trained on 3,508 CLPT analytical cases. A separate FEM surrogate model (325 cases) yields cross-domain R-squared = -0.69 against NLGEOM FEM; this is not a test of the CLPT ROM but a separate model showing the domain gap. CLPT is a linear theory, while NLGEOM captures geometric nonlinearity. The ROM is intended for design-space exploration within the CLPT domain. Feature dominance: param_1 controls 85.5% of predictions. Final designs should be validated with full NLGEOM FEM.
 
 ### Cartesian Improvement Magnitude
 
@@ -1100,11 +1100,11 @@ Genesis-PROV2-Packaging-OS/
 | **Expanded Sweep FEM** | CalculiX with SHA-256 provenance per file | **High** | 500 |
 | **Von Karman nonlinear FD** | Finite-difference PDE solver, Kirchhoff-von Karman, 13-point stencil | **High** | 3 |
 | **CLPT Analytical** | Closed-form Classical Laminate Plate Theory, exact composite | **Medium** | N/A (3,508 analytical) |
-| **AI Surrogate (ROM)** | GradientBoosting trained on CLPT, < 1 ms prediction, R^2 = 0.9977 | **Medium** (within domain) | N/A |
+| **AI Surrogate (ROM)** | GradientBoosting trained on CLPT, < 1 ms prediction, within-domain CLPT R^2 = 0.9977 (not FEM-validated) | **Medium** (within domain) | N/A |
 | **Bayesian Optimization** | GP surrogate + Expected Improvement on FEM evaluations | **High** (14 converged cases) | 14 |
 | **Monte Carlo** | Manufacturing tolerance sampling at chaos cliff boundary | **High** | 21 |
 
-**Total compute: 1,612 real FEM cases, 3,508 CLPT analytical samples, 3,224 HPC hours**
+**Total compute: 1,612 real FEM cases, 3,508 CLPT analytical cases, 3,224 HPC hours**
 
 ---
 
