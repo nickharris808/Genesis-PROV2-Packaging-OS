@@ -110,7 +110,7 @@ Monte Carlo and sensitivity analysis methods for warpage prediction confidence i
 Methods for scaling the Cartesian framework from die-level to panel-level substrates, including corrections for edge effects and non-uniform boundary conditions.
 
 **Design Desert Claims (126-137)**:
-Documentation that 11/11 alternative approaches fail, establishing the IP fortress around the Cartesian approach. Supported by 645 task IDs.
+Documentation that 11/11 alternative approaches fail, establishing the IP fortress around the Cartesian approach. Supported by ~550 task IDs.
 
 **Cross-Patent Integration Claims (138-145)**:
 Integration points with other Genesis provisional patents, including Fab OS (PROV 1) for circular wafer processing, Glass PDK (PROV 7) for glass substrate characterization, and Isocompiler (PROV 8) for EM isolation in multi-die packages.

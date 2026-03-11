@@ -97,13 +97,13 @@ Performs a Composite Figure of Merit (CFoM) analysis using 10,000 random weight 
 
 ## Full Data Room Access
 
-The public verification confirms the physical reasoning and reference values. For complete reproduction including all 645 FEM task IDs, raw CalculiX output files, and the full evidence chain, request NDA-protected data room access.
+The public verification confirms the physical reasoning and reference values. For complete reproduction including all ~550 FEM task IDs, raw CalculiX output files, and the full evidence chain, request NDA-protected data room access.
 
 ### What the Full Data Room Contains
 
 | Category | Contents | Size |
 |:---------|:---------|:-----|
-| FEM results | 645 unique task IDs with input/output files | ~2 GB |
+| FEM results | ~550 unique task IDs with input/output files | ~2 GB |
 | SHA-256 manifest | 3,547 files with cryptographic hashes | 15 MB |
 | GDSII output | Full layout from design compiler | 218 MB |
 | CalculiX .frd files | Raw FEM output for validation cases | ~256 KB |
@@ -121,7 +121,7 @@ With data room access, the complete 5-step verification can be run:
 # Expected result: 5/5 PASS
 # Step 1: Physics verification (Kirchhoff + rectangular immunity)
 # Step 2: Software verification (solver execution + output validation)
-# Step 3: Provenance verification (645 task IDs cross-referenced)
+# Step 3: Provenance verification (~550 task IDs cross-referenced)
 # Step 4: Integrity verification (SHA-256 manifest check)
 # Step 5: GDSII verification (design output format validation)
 ```

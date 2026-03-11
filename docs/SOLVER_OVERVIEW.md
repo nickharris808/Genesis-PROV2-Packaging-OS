@@ -61,7 +61,7 @@ for odd m, n only. The key observation is that this solution is expressed entire
 
 ### NLGEOM Implementation
 
-The NLGEOM (nonlinear geometry) implementation solves the full coupled Kirchhoff-von Karman system using an iterative Newton-Raphson scheme. This is executed in the CalculiX open-source FEM solver with shell elements and thermal loading. The cloud FEM cases (645 task IDs) use this formulation.
+The NLGEOM (nonlinear geometry) implementation solves the full coupled Kirchhoff-von Karman system using an iterative Newton-Raphson scheme. This is executed in the CalculiX open-source FEM solver with shell elements and thermal loading. The cloud FEM cases (~550 task IDs) use this formulation.
 
 ---
 

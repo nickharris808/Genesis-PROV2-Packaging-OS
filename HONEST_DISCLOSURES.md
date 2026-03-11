@@ -8,7 +8,7 @@ This document provides a complete and unqualified disclosure of the limitations,
 
 Every result reported in this data room -- including the Rectangular Immunity Theorem (0.000% azimuthal effect), the Chaos Cliff (23.4x amplification), the Design Desert (11/11 blocked), and the AI Compiler (R-squared = 0.9977) -- is produced by computational simulation or analytical calculation. Specifically:
 
-- **NLGEOM FEM**: 645 task IDs executed on the Inductiva cloud HPC platform using the CalculiX open-source finite element solver with nonlinear geometry enabled.
+- **NLGEOM FEM**: ~550 verified task IDs (512 from flat JSON files + ~38 from parquet) executed on the Inductiva cloud HPC platform using the CalculiX open-source finite element solver with nonlinear geometry enabled.
 - **Von Karman nonlinear solver**: Local finite-difference PDE solver implementing Kirchhoff-von Karman plate theory.
 - **CLPT analytical**: Closed-form Classical Laminate Plate Theory for multi-layer composite stacks.
 - **AI surrogate (ROM)**: GradientBoosting regression trained on CLPT-generated data.
@@ -42,7 +42,7 @@ The validation establishes that the FEM solver is correctly implementing plate m
 
 ## 4. Task IDs from Inductiva Cloud Platform
 
-The 645 verified task IDs provide third-party computational provenance:
+The ~550 verified task IDs provide third-party computational provenance:
 
 - Each task ID corresponds to a specific simulation job executed on Inductiva's cloud HPC infrastructure.
 - Task IDs confirm execution date, input parameters, solver configuration, and completion status.
@@ -110,7 +110,7 @@ An earlier version of the data room included a Six-Sigma yield certification tha
 
 ## 10. Design Desert -- Existence Disclosed, Details Protected
 
-The 11/11 design-around blocking result is supported by 645 task IDs and 500 SHA-256 integrity hashes. The specific alternative paths tested and the failure mechanisms are documented in the NDA-protected full data room. This public disclosure confirms:
+The 11/11 design-around blocking result is supported by ~550 task IDs and 500 SHA-256 integrity hashes. The specific alternative paths tested and the failure mechanisms are documented in the NDA-protected full data room. This public disclosure confirms:
 
 - 11 alternative stiffness distribution strategies were tested.
 - All 11 produced worse warpage outcomes than the Cartesian approach.
@@ -128,7 +128,7 @@ Despite the limitations above, the following results are established with high c
 | Rectangular Immunity (0.000%) | **Very High** | Geometric identity + 30 NLGEOM FEM + 3 local solver + 15 material sweep |
 | Chaos Cliff (23.4x) | **High** | 41 NLGEOM FEM with dense parameter sweep |
 | Material Invariance | **High** | 15 FEM cases across 5 materials |
-| Design Desert (11/11 blocked) | **High** | 645 task IDs with SHA-256 provenance |
+| Design Desert (11/11 blocked) | **High** | ~550 task IDs with SHA-256 provenance |
 | AI Compiler (R-squared = 0.9977) | **High** (within CLPT domain) | 3,508 samples, 5-fold CV |
 | Working software | **High** | Compiler predicts, generates GDSII, passes 5/5 verification |
 

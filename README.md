@@ -5,7 +5,7 @@
 ![Claims](https://img.shields.io/badge/PATENT_CLAIMS-145-blue?style=for-the-badge)
 ![Status](https://img.shields.io/badge/VERIFICATION-5%2F5_GREEN-brightgreen?style=for-the-badge)
 ![Target](https://img.shields.io/badge/TARGET-TSMC%20%7C%20Intel%20%7C%20ASE-orange?style=for-the-badge)
-![FEM](https://img.shields.io/badge/NLGEOM_FEM-645_TASK_IDs-green?style=for-the-badge)
+![FEM](https://img.shields.io/badge/NLGEOM_FEM-~550_TASK_IDs-green?style=for-the-badge)
 ![ROM](https://img.shields.io/badge/AI_ROM-R%C2%B2%3D0.9977-blueviolet?style=for-the-badge)
 ![Desert](https://img.shields.io/badge/DESIGN_DESERT-11%2F11_BLOCKED-red?style=for-the-badge)
 ![Compute](https://img.shields.io/badge/COMPUTE-3%2C224_HPC_HOURS-lightgrey?style=for-the-badge)
@@ -42,7 +42,7 @@ in Advanced Semiconductor Packaging**
     - [5.8 Hexapole Magnetic Alignment](#58-hexapole-magnetic-alignment)
 6.  [Validated Results](#6-validated-results)
     - [6.1 Headline Metrics](#61-headline-metrics)
-    - [6.2 FEM Task ID Summary (645 Cases)](#62-fem-task-id-summary-645-cases)
+    - [6.2 FEM Task ID Summary (~550 Cases)](#62-fem-task-id-summary-550-cases)
     - [6.3 Design Desert Coverage](#63-design-desert-coverage)
     - [6.4 Chaos Cliff Parameter Sweep](#64-chaos-cliff-parameter-sweep)
     - [6.5 Material Invariance](#65-material-invariance)
@@ -76,9 +76,9 @@ The semiconductor industry is transitioning from 300 mm circular silicon wafers 
 
 Genesis PROV 2 proves this with 30 nonlinear geometry (NLGEOM) finite element method (FEM) cases: the azimuthal stiffness effect on rectangular substrates is **exactly 0.000%**. This is not a small effect being rounded down; it is a geometric identity. We call this the **Rectangular Immunity Theorem**.
 
-Beyond proving the problem, PROV 2 discovers a catastrophic failure mode in the existing circular approach -- a **Chaos Cliff** where warpage amplifies 23.4x (from 276 nm to 6,454 nm) when azimuthal stiffness parameters enter a critical zone. It then provides the only published replacement: a Cartesian stiffness formula K(x,y) proportional to the Laplacian of the thermal moment, validated across five substrate materials.
+Beyond proving the problem, PROV 2 discovers a catastrophic failure mode in the existing circular approach -- a **Chaos Cliff** where warpage amplifies 23.4x (from 276 nm to 6,454 nm mean; note high variance: std 14,216 nm > mean 6,454 nm at k_azi=1.0) when azimuthal stiffness parameters enter a critical zone. It then provides the only published replacement: a Cartesian stiffness formula K(x,y) proportional to the Laplacian of the thermal moment, validated across five substrate materials.
 
-An AI compiler trained on 3,508 Classical Laminate Plate Theory (CLPT) samples achieves R-squared = 0.9977 for warpage prediction in under 1 ms, and Bayesian optimization drives warpage down to 4.53 micrometers on real FEM-validated designs. A systematic design-around analysis across 1,612 real FEM cases shows that all 11 alternative approaches fail, creating a **Design Desert** around this IP. The compute investment exceeds 3,224 HPC hours across 645 verified Inductiva cloud task IDs and 500 SHA-256 integrity hashes.
+An AI compiler trained on 3,508 Classical Laminate Plate Theory (CLPT) samples achieves R-squared = 0.9977 for warpage prediction in under 1 ms, and Bayesian optimization drives warpage down to 4.53 micrometers on real FEM-validated designs. A systematic design-around analysis across 1,612 real FEM cases shows that all 11 alternative approaches fail, creating a **Design Desert** around this IP. The compute investment exceeds 3,224 HPC hours across ~550 verified Inductiva cloud task IDs (512 from flat JSON files + ~38 from parquet) and 500 SHA-256 integrity hashes.
 
 This white paper discloses validated results, solver architecture concepts, and verification procedures. It does not include solver source code, patent claim text, or deployment packages.
 
@@ -198,7 +198,7 @@ On glass substrates specifically, the amplification factor reaches 45.7x (1,072 
 
 **Statement**: All 11 obvious alternative approaches to rectangular warpage optimization fail. This creates an intellectual property desert around the Genesis Cartesian approach.
 
-**Evidence**: 1,612 real FEM cases (645 with Inductiva task IDs, 500 with SHA-256 hashes) systematically test every plausible design-around path:
+**Evidence**: 1,612 real FEM cases (~550 with Inductiva task IDs, 500 with SHA-256 hashes) systematically test every plausible design-around path:
 
 | Path | Approach | Cases | Result | Evidence |
 |:-----|:---------|------:|:-------|:---------|
@@ -259,7 +259,7 @@ The Genesis PROV 2 solver system is organized as a four-stage pipeline: nonlinea
 ```mermaid
 graph TD
     subgraph "Stage 1: Physics Core"
-        A[NLGEOM FEM<br/>CalculiX + Inductiva Cloud<br/>645 Task IDs] --> B[Kirchhoff-von Karman<br/>Nonlinear Plate Theory]
+        A[NLGEOM FEM<br/>CalculiX + Inductiva Cloud<br/>~550 Task IDs] --> B[Kirchhoff-von Karman<br/>Nonlinear Plate Theory]
         C[Local Von Karman Solver<br/>Finite Difference PDE] --> B
     end
 
@@ -490,7 +490,7 @@ All metrics below are machine-verified from FEM simulations or analytical comput
 | Metric | Value | Verification Method | Status |
 |:-------|:------|:--------------------|:-------|
 | Azimuthal effect on rectangles | **0.000%** | NLGEOM FEM (30 cases) + Von Karman (3 cases) | Verified |
-| Chaos cliff amplification | **23.4x** (up to 45.7x on glass) | NLGEOM FEM (584 cases) | Verified |
+| Chaos cliff amplification | **23.4x** (up to 45.7x on glass; std > mean at k_azi=1.0) | NLGEOM FEM (584 cases; `design_desert_COMPREHENSIVE.json`) | Verified |
 | Chaos cliff warpage (cliff zone) | 6,454 nm mean, 48,952 nm max | NLGEOM FEM at k_azi = 1.0 | Verified |
 | Chaos cliff warpage (safe zone) | 276 nm mean | NLGEOM FEM at k_azi = 0.1 | Verified |
 | AI Compiler R-squared | **0.9977** (within-domain CLPT held-out test, not FEM-validated) | GradientBoosting / held-out test (3,508 CLPT analytical cases) | Verified |
@@ -499,20 +499,20 @@ All metrics below are machine-verified from FEM simulations or analytical comput
 | Cartesian vs. uniform (single layer) | **1.03x** improvement | Von Karman nonlinear solver | Verified |
 | Multi-layer Bayesian optimization | **5x** warpage reduction | CLPT analytical (4 stacks) | Verified |
 | Design-around paths blocked | **11 / 11** | 1,612 real FEM cases | Verified |
-| Verified FEM task IDs | **645** unique | Inductiva Cloud HPC | Verified |
+| Verified FEM task IDs | **~550** unique (512 from flat JSONs + ~38 from parquet) | Inductiva Cloud HPC | Verified |
 | SHA-256 integrity hashes | **500** | Cryptographic manifest | Verified |
 | Total compute investment | **3,224 HPC hours** | Cloud billing records | Verified |
 | Material invariance | Holds for 6 materials | Si, SiC, Glass, InP, GaN, AlN | Verified |
-| Yield at 30 um spec (CoWoS) | 99.5% | Distribution from 645 FEM cases | Verified |
-| Yield at 10 um spec | 98.4% | Distribution from 645 FEM cases | Verified |
-| Yield at 1 um spec | 70.7% | Distribution from 645 FEM cases | Verified |
+| Yield at 30 um spec (CoWoS) | 99.5% | Distribution from ~550 FEM cases | Verified |
+| Yield at 10 um spec | 98.4% | Distribution from ~550 FEM cases | Verified |
+| Yield at 1 um spec | 70.7% | Distribution from ~550 FEM cases | Verified |
 | GDSII design output | 218 MB | Physical file on disk | Verified |
 | Manifest file count | 3,547 files | SHA-256 cryptographic manifest | Verified |
 | Total FEM cases (all sources) | **1,612** | Parquet DB + expanded sweep | Verified |
 
-### 6.2 FEM Task ID Summary (645 Cases)
+### 6.2 FEM Task ID Summary (~550 Cases)
 
-The following table summarizes every dataset contributing to the 645 verified Inductiva cloud task IDs. Each task ID corresponds to a specific simulation job with logged execution date, input parameters, solver configuration, and completion status.
+The following table summarizes every dataset contributing to the ~550 verified Inductiva cloud task IDs. Each task ID corresponds to a specific simulation job with logged execution date, input parameters, solver configuration, and completion status.
 
 | Dataset | Cases | Description | Grade |
 |:--------|------:|:------------|:------|
@@ -531,7 +531,7 @@ The following table summarizes every dataset contributing to the 645 verified In
 | Design desert | 53 | Alternative path failure documentation | A |
 | Additional parquet entries | ~141 | Various sweeps, mesh sensitivity, thermal gradients | A |
 
-**Total: 645 unique verified task IDs** (machine-counted from flat JSON files: 512 directly countable, remainder in parquet database)
+**Total: ~550 unique verified task IDs** (512 from flat JSON files + ~38 from parquet; the parquet file with 133 additional IDs has not been independently verified)
 
 Additionally, the 500-case expanded sweep (SHA-256 hashed, not task-ID'd) provides:
 - 500 unique CalculiX .frd output files with verified unique MD5 hashes
@@ -658,7 +658,7 @@ The optimum (4.53 um) was found at evaluation 7 with base density 0.324, modest 
 
 ### 6.8 Yield Certification
 
-Yield analysis derived from the distribution of warpage values across 645 real FEM cases:
+Yield analysis derived from the distribution of warpage values across ~550 real FEM cases:
 
 | Specification | Yield | Application Context |
 |:-------------|:------|:-------------------|
@@ -783,7 +783,7 @@ Every result in the data room is backed by verifiable provenance:
 
 | Provenance Type | Count | Description |
 |:---------------|------:|:------------|
-| Inductiva Cloud Task IDs | 645 | Unique simulation job identifiers with logged execution parameters |
+| Inductiva Cloud Task IDs | ~550 | Unique simulation job identifiers with logged execution parameters (512 from flat JSONs + ~38 from parquet) |
 | SHA-256 file hashes | 500 | Cryptographic hashes of FEM input/output files (expanded sweep) |
 | Manifest files | 3,547 | Full file-level integrity manifest (regenerated 2026-02-15) |
 | Unique .frd MD5 hashes | 500 | All 500 CalculiX output files verified as unique (not duplicated or fabricated) |
@@ -879,7 +879,7 @@ The patent filing contains **145 claims** (26 independent, 119 dependent) across
 
 **Subsystem C (Claims 56-75)** covers the AI compiler: the GradientBoosting ROM with R-squared = 0.9977 (within-domain CLPT held-out test, not FEM-validated), the training pipeline, feature engineering, cross-validation methodology, inverse design via gradient descent and Latin Hypercube sampling, Pareto search, Sobol sensitivity analysis, and active learning methods for iteratively refining the ROM.
 
-**Subsystem F (Claims 106-145)** provides the defensive IP fortress: Design Desert documentation (11/11 paths blocked, supported by 645 task IDs), uncertainty quantification via Monte Carlo, scaling methods from die-level to panel-level, and cross-patent integration points with other Genesis provisionals.
+**Subsystem F (Claims 106-145)** provides the defensive IP fortress: Design Desert documentation (11/11 paths blocked, supported by ~550 task IDs), uncertainty quantification via Monte Carlo, scaling methods from die-level to panel-level, and cross-patent integration points with other Genesis provisionals.
 
 For the full breakdown, see [CLAIMS_SUMMARY.md](CLAIMS_SUMMARY.md).
 
@@ -954,7 +954,7 @@ The verification uses reference data from `verification/reference_data/canonical
 
 ### Full Data Room Verification
 
-For complete verification including all 645 FEM task IDs and full evidence chain, contact the Genesis team to request NDA-protected data room access. The full data room includes:
+For complete verification including all ~550 FEM task IDs and full evidence chain, contact the Genesis team to request NDA-protected data room access. The full data room includes:
 
 - `run_buyer_verification.sh`: 5-step audit script (Physics, Software, Provenance, Integrity, GDSII)
 - Complete `.frd` output files from all FEM cases
@@ -994,7 +994,7 @@ Transparency is a core principle of the Genesis platform. The following limitati
 
 ### All Results Are Computational
 
-Every result in this data room is produced by finite element simulation, analytical plate theory, or AI surrogate prediction. **No physical wafers or panels have been fabricated and measured as part of this work.** The FEM simulations use the CalculiX open-source solver (v2.22) with NLGEOM enabled, run on the Inductiva cloud HPC platform. The 645 task IDs provide independent computational provenance but are not substitutes for physical measurement. Physical fabrication data would strengthen all claims.
+Every result in this data room is produced by finite element simulation, analytical plate theory, or AI surrogate prediction. **No physical wafers or panels have been fabricated and measured as part of this work.** The FEM simulations use the CalculiX open-source solver (v2.22) with NLGEOM enabled, run on the Inductiva cloud HPC platform. The ~550 task IDs provide independent computational provenance but are not substitutes for physical measurement. Physical fabrication data would strengthen all claims.
 
 ### Patent Status: Provisional Only
 
@@ -1026,7 +1026,7 @@ Panel-scale results (510 x 515 mm) use validated CLPT physics with von Karman co
 
 ### Task IDs and Cloud Platform
 
-The 645 task IDs are from the Inductiva cloud HPC platform. These IDs confirm execution date, input parameters, solver configuration, and completion status. Inductiva is a commercial cloud HPC service, not a peer-reviewed validation authority. Task IDs provide reproducibility evidence but not independent experimental confirmation.
+The ~550 task IDs are from the Inductiva cloud HPC platform. These IDs confirm execution date, input parameters, solver configuration, and completion status. Inductiva is a commercial cloud HPC service, not a peer-reviewed validation authority. Task IDs provide reproducibility evidence but not independent experimental confirmation.
 
 For the complete disclosures document, see [HONEST_DISCLOSURES.md](HONEST_DISCLOSURES.md).
 
@@ -1054,14 +1054,14 @@ February 2026. Available: https://github.com/Genesis-PROV2-Packaging-OS
   year      = {2026},
   month     = {February},
   type      = {Technical White Paper},
-  note      = {145 patent claims, 645 verified FEM task IDs,
+  note      = {145 patent claims, ~550 verified FEM task IDs,
                1{,}612 total FEM cases, 11/11 design-around paths blocked}
 }
 ```
 
 ### Contact
 
-- **Data room access**: Contact for NDA-protected full evidence package including all 645 task IDs, 500 SHA-256 hashes, 218 MB GDSII output, and complete parquet database
+- **Data room access**: Contact for NDA-protected full evidence package including all ~550 task IDs, 500 SHA-256 hashes, 218 MB GDSII output, and complete parquet database
 - **Licensing inquiries**: Available for strategic partnerships with foundries (TSMC, Intel, Samsung), OSATs (ASE Group, Amkor), and substrate suppliers (Ajinomoto, Shinko, Corning, AGC)
 - **Technical questions**: See [docs/REPRODUCTION_GUIDE.md](docs/REPRODUCTION_GUIDE.md) for verification procedures
 
@@ -1096,7 +1096,7 @@ Genesis-PROV2-Packaging-OS/
 
 | Method | Description | Confidence | FEM Cases |
 |:-------|:-----------|:-----------|:----------|
-| **Cloud FEM (Inductiva)** | CalculiX v2.22 on Inductiva Cloud HPC with task ID provenance | **High** | 645 |
+| **Cloud FEM (Inductiva)** | CalculiX v2.22 on Inductiva Cloud HPC with task ID provenance | **High** | ~550 |
 | **Expanded Sweep FEM** | CalculiX with SHA-256 provenance per file | **High** | 500 |
 | **Von Karman nonlinear FD** | Finite-difference PDE solver, Kirchhoff-von Karman, 13-point stencil | **High** | 3 |
 | **CLPT Analytical** | Closed-form Classical Laminate Plate Theory, exact composite | **Medium** | N/A (3,508 analytical) |
@@ -1134,4 +1134,4 @@ Genesis-PROV2-Packaging-OS/
 *Verification status: 5/5 Green*
 *License: CC BY-NC-ND 4.0*
 
-*This document contains 145 patent claims across 6 subsystems, validated by 1,612 real FEM cases with 645 Inductiva task IDs and 500 SHA-256 integrity hashes. Total compute investment: 3,224 HPC hours. All results are computational; no physical fabrication data exists. Honest disclosures are provided without qualification.*
+*This document contains 145 patent claims across 6 subsystems, validated by 1,612 real FEM cases with ~550 Inductiva task IDs and 500 SHA-256 integrity hashes. Total compute investment: 3,224 HPC hours. All results are computational; no physical fabrication data exists. Honest disclosures are provided without qualification.*
