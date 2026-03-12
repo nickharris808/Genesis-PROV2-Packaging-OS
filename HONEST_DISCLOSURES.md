@@ -15,6 +15,8 @@ Every result reported in this data room -- including the Rectangular Immunity Th
 
 **No physical wafers or panels have been fabricated, processed, or measured as part of this work.** The simulations use established physics and validated numerical methods, but computational results are not substitutes for experimental validation. Physical fabrication data would strengthen all claims.
 
+**Material property disclosure (Feb 2026 audit, updated March 2026):** The simulation previously used incorrect material properties for key materials. Silicon elastic modulus was set to 130 GPa; this was corrected to 170 GPa (proper value for [100] orientation) in the March 2026 audit. Substrate elastic modulus is set to 25 GPa (correct value for typical organic substrates: ~3 GPa). The substrate property error may still affect warpage predictions and reported improvement factors.
+
 ---
 
 ## 2. Patent Status: Provisional Only

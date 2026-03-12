@@ -52,12 +52,12 @@ Bayesian optimization applied to multi-layer composite stacks, achieving 5x warp
 
 ## Part III: AI-Accelerated Design Space Exploration (Claims 56-75)
 
-**Evidence Strength: Strong -- R-squared = 0.9977, working software**
+**Evidence Strength: Strong -- R-squared = 0.9977 (within CLPT training domain only; cross-domain R²=-0.15 on FEM test data), working software**
 
 This subsystem covers the AI compiler and inverse design capabilities.
 
 **ROM Surrogate Claims (56-62)**:
-The GradientBoosting reduced-order model trained on 3,508 CLPT samples, achieving R-squared = 0.9977 within-domain accuracy and sub-millisecond prediction time. Includes the training pipeline, feature engineering, and cross-validation methodology.
+The GradientBoosting reduced-order model trained on 3,508 CLPT samples, achieving R-squared = 0.9977 within-domain accuracy (within CLPT training domain only; cross-domain R²=-0.15 on FEM test data) and sub-millisecond prediction time. Includes the training pipeline, feature engineering, and cross-validation methodology.
 
 **Inverse Design Claims (63-68)**:
 Multi-objective inverse design using the ROM as the forward model, with gradient descent, Latin Hypercube sampling, Pareto search, and Sobol sensitivity analysis for design-space exploration.
