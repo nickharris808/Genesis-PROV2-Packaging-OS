@@ -55,7 +55,7 @@ def check_1_kirchhoff_rectangular_vs_circular():
     This establishes the physical basis for the Rectangular Immunity Theorem.
     """
     # Material and geometry parameters (silicon)
-    E = 130e9          # Young's modulus, Pa (silicon)
+    E = 170e9          # Si(100) single crystal, Hopcroft et al. 2010
     nu = 0.28          # Poisson's ratio (silicon)
     h = 0.775e-3       # Thickness, m (standard 300mm wafer)
     q = 1000.0          # Uniform pressure, Pa
@@ -87,7 +87,7 @@ def check_1_kirchhoff_rectangular_vs_circular():
     passed = True
 
     # Check D computation
-    D_expected = 130e9 * (0.775e-3)**3 / (12 * (1 - 0.28**2))
+    D_expected = 170e9 * (0.775e-3)**3 / (12 * (1 - 0.28**2))
     if abs(D - D_expected) / D_expected > 1e-10:
         passed = False
 
@@ -148,7 +148,7 @@ def check_2_rectangular_immunity():
     # Rectangular plate parameters
     a = 0.510   # width, m (510mm panel)
     b = 0.515   # height, m (515mm panel)
-    E = 130e9   # Young's modulus (silicon)
+    E = 170e9   # Si(100) single crystal, Hopcroft et al. 2010
     nu = 0.28   # Poisson's ratio
     h = 0.775e-3  # thickness
     q = 1000.0  # uniform pressure
