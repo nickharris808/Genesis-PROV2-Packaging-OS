@@ -227,7 +227,7 @@ Several solver scripts in PROV_2 used incorrect material property values:
    130 GPa is the Voigt-Reuss-Hill polycrystalline average, not appropriate for
    single-crystal wafers and interposers used in CoWoS packaging.
 
-2. **Organic substrate modulus**: `calibration_cowos.py` used E=25 GPa for organic
+2. **Organic substrate modulus**: Multiple files used E=25 GPa for organic
    (ABF) substrates. The correct value is approximately E=3 GPa for typical organic
    packaging substrates. 25 GPa is closer to a filled epoxy composite and overstates
    substrate stiffness by ~8x, which significantly affects warpage predictions.
@@ -241,6 +241,11 @@ Several solver scripts in PROV_2 used incorrect material property values:
 | `calibration_cowos.py` | Si interposer E (3 nodes) | 130 GPa | 170 GPa |
 | `calibration_cowos.py` | Si die E | 130 GPa | 170 GPa |
 | `calibration_cowos.py` | Organic substrate E (2 nodes) | 25 GPa | 3 GPa |
+| `desert_path_validation.py` | Organic substrate E | 25 GPa | 3 GPa |
+| `claim_13_validation.py` | Organic substrate E | 25 GPa | 3 GPa |
+| `cowos_inverse_design.py` | Organic substrate E (2 locations) | 25 GPa | 3 GPa |
+| `panel_scale_benchmarks.py` | Organic substrate E | 25 GPa | 3 GPa |
+| `rom_stability_analysis.py` | Organic E in material lookup | 25 GPa | 3 GPa |
 
 ### Impact
 
