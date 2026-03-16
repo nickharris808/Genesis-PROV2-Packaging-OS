@@ -183,7 +183,7 @@ The ROM uses GradientBoosting regression (scikit-learn implementation) with the 
 2. **Training data**: 3,508 CLPT analytical evaluations via smart Latin Hypercube sweep
 3. **Model**: GradientBoostingRegressor with hyperparameter tuning
 4. **Validation**: 5-fold cross-validation, R-squared = 0.9982 +/- 0.0001
-5. **Test accuracy**: R-squared = 0.9977 on held-out test set
+5. **Test accuracy**: R-squared = 0.9977 on held-out CLPT test set (training domain only; cross-domain R²=-0.15; 5-fold CV: R²=0.89±0.02)
 
 ### Use in Inverse Design
 

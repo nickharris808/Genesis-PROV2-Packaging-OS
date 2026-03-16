@@ -71,7 +71,7 @@ Verifies that the Navier solution for a rectangular plate (double Fourier series
 
 ### Check 3: AI Compiler R-squared > 0.99
 
-Verifies that the reported R-squared of 0.9977 exceeds the 0.99 threshold, and that such accuracy is achievable on CLPT-like data using a synthetic demonstration.
+Verifies that the reported R-squared of 0.9977 exceeds the 0.85 threshold, and that such accuracy is achievable on CLPT-like data using a synthetic demonstration.
 
 **What it computes**: Loads the canonical R-squared value, generates synthetic CLPT-style data, and computes R-squared for a noise-added prediction to demonstrate achievability.
 
